@@ -6,4 +6,5 @@ read NUMBER
 if [$(($NUMBER % 2)) -eq to 0 ]; then
     echo "Given number $NUMBER is even"
 else
-   echo "Given Number is odd"
+   echo "Given Number $NUMBER is odd"
+fi
