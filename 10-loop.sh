@@ -11,7 +11,7 @@ LOGS_FOLDER="/var/log/Pratice1"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
-mkdir  $LOGS_FOLDER
+mkdir -P $LOGS_FOLDER
 echo "Script started executing at : $(date)" | tee -a $LOG_FILE
 
 if  [ $USERID -ne 0 ]; then
@@ -32,5 +32,13 @@ VALIDATE(){ #functions receive inputs through args just like shell script args
 
 for package in $@
 do
-    echo "Package is : $Package"
+    #check package is already installed or not
+    dnf list installed $package &>>$LOG_FILE
+
+    if [ $? -ne 0 ]; then 
+        dnf install $package -y &>>$LOG_FILE
+        validate $? "$package"
+    else 
+        echo -e "$package already installed ... $Y SKIPPING $N"
+    fi
 done
